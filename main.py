@@ -23,9 +23,12 @@ def dashboard():
         cases = entry['actuals']['cases']
         new_cases = entry['actuals']['newCases']
         deaths = entry['actuals']['deaths']
+        positive_tests = entry['actuals']['positiveTests']
+        case_density=entry['metrics']['caseDensity']
+        hospital_beds=entry['actuals']['hospitalBeds']['capacity']
         vaccination_completed=entry['actuals']['vaccinationsCompleted']
-        table_data.append({'state': state, 'cases': cases, 'deaths': deaths, 
-                            'new_cases':new_cases,'vaccination_completed':vaccination_completed})
+        table_data.append({'state': state, 'cases': cases, 'new_cases':new_cases, 'deaths': deaths, 
+                           'positive_tests': positive_tests , 'case_density':case_density,'hospital_beds':hospital_beds ,'vaccination_completed':vaccination_completed})
 
     # Create plots
     
