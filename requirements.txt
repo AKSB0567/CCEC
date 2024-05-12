@@ -1,3 +1,4 @@
 Flask
 requests
 plotly
+urllib3==1.26.7
