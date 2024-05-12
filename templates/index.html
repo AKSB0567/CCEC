@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 Dashboard</title>
+    <style>
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow-x: auto;
+        }
+        /* Styles for the table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        /* Ensure table headers stay on top */
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
+            z-index: 2;
+        }
+        /* Styles for the table body */
+        tbody {
+            height: 400px; /* Adjust the height as needed */
+            overflow-y: auto;
+        }
+        /* Styles for the pagination */
+        .pagination {
+            display: inline-block;
+        }
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+        }
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border: 1px solid #4CAF50;
+        }
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">COVID-19 Dashboard</h1>
+
+    <div class="container">
+    <table id="data-table" border="1">
+        <thead>
+            <tr>
+                <th>State</th>
+                <th>Cases</th>
+                <th>New Cases</th>
+                <th>Deaths</th>
+                <th>Positive tests</th>
+                <th>Case Density</th>
+                <th>Hostpital Beds</th>
+                <th>Vaccination Completed</th>
+            </tr>
+        </thead>
+         <tbody>
+            {% for entry in table_data %}
+            <tr>
+                <td>{{ entry['state'] }}</td>
+                <td>{{ entry['cases'] }}</td>
+                <td>{{ entry['new_cases'] }}</td>
+                <td>{{ entry['deaths'] }}</td>
+                <td>{{ entry['positive_tests'] }}</td>
+                <td>{{ entry['case_density'] }}</td>
+                <td>{{ entry['hospital_beds'] }}</td>
+                <td>{{ entry['vaccination_completed'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination" id="pagination"></div>
+    
+    <div id="newcase_plot">{{ new_case_graph|safe }}</div>
+    
+    <div id="starebcase_plot">{{ starebcase_graph|safe }}</div>
+    
+    <script>
+        // JavaScript for pagination
+        const table = document.getElementById('data-table');
+        const rows = table.getElementsByTagName('tr');
+        const pageSize = 30;
+
+        function displayPage(page) {
+            const startIndex = (page - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, rows.length);
+
+            for (let i = 0; i < rows.length; i++) {
+                rows[i].style.display = i >= startIndex && i < endIndex ? '' : 'none';
+            }
+        }
+
+        function createPagination() {
+            const pageCount = Math.ceil(rows.length / pageSize);
+            let paginationHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                paginationHTML += `<a href="#" onclick="displayPage(${i})">${i}</a>`;
+            }
+
+            document.getElementById('pagination').innerHTML = paginationHTML;
+        }
+
+        createPagination();
+        displayPage(1);
+    </script>
+</body>
+</html>
